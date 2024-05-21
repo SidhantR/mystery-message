@@ -7,7 +7,6 @@ export async function POST(request: Request) {
     await dbConnect();
     try {
         const { username, email, password } = await request.json()
-
         const existingUserVerifiedByUserName = await UserModel.findOne({
             username: username,
             isVerified: true
@@ -41,6 +40,7 @@ export async function POST(request: Request) {
                 await existingUserByEmail.save()
             }
         } else {
+            console.log(45)
             const hashedPassword = await bcrypt.hash(password, 10)
             const expiryDate = new Date()
             expiryDate.setHours(expiryDate.getHours() + 1)
@@ -57,7 +57,6 @@ export async function POST(request: Request) {
             })
             await newUser.save()
         }
-
         const emailResponse = await sendVerificationEmail(email, username, verifyCode)
 
         if(!emailResponse.success){
@@ -73,7 +72,7 @@ export async function POST(request: Request) {
         }, {status: 201})
 
     } catch (err) {
-        console.error("Error Regestering user", err);
+        console.log("Error Regestering user", err);
         return Response.json(
             {
                 success: false,

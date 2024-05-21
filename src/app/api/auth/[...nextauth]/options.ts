@@ -45,7 +45,7 @@ export const authOptions: NextAuthOptions ={
     callbacks: {
         async jwt({token, user}){
             if(user){
-                //adding values in token
+                //modifying token so we dont have to call again and again
                 token._id = user._id?.toString();
                 token.isVerified = user.isVerified;
                 token.isAcceptingMessaages= user.isAcceptingMessages;
